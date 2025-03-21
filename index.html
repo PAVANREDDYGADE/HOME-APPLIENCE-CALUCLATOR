@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Household Electricity Bill Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 5px;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Household Electricity Bill Calculator</h1>
+    </header>
+
+    <div class="container">
+        <h2>Enter Appliance Details</h2>
+        <table>
+            <tr>
+                <th>Appliance</th>
+                <th>Power (Watts)</th>
+                <th>Hours Used per Day</th>
+                <th>Cost per kWh (₹)</th>
+            </tr>
+            <tr>
+                <td>Fan</td>
+                <td><input type="number" id="fanPower" value="75"></td>
+                <td><input type="number" id="fanHours" value="8"></td>
+                <td><input type="number" id="costPerKwhFan" value="7"></td>
+            </tr>
+            <tr>
+                <td>Light</td>
+                <td><input type="number" id="lightPower" value="15"></td>
+                <td><input type="number" id="lightHours" value="10"></td>
+                <td><input type="number" id="costPerKwhLight" value="7"></td>
+            </tr>
+            <tr>
+                <td>TV</td>
+                <td><input type="number" id="tvPower" value="100"></td>
+                <td><input type="number" id="tvHours" value="5"></td>
+                <td><input type="number" id="costPerKwhTv" value="7"></td>
+            </tr>
+        </table>
+
+        <button class="btn" onclick="calculateBill()">Calculate Bill</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateBill() {
+            // Fan calculation
+            const fanPower = parseFloat(document.getElementById('fanPower').value) / 1000;
+            const fanHours = parseFloat(document.getElementById('fanHours').value);
+            const costPerKwhFan = parseFloat(document.getElementById('costPerKwhFan').value);
+            const fanEnergy = fanPower * fanHours;
+            const fanCost = fanEnergy * costPerKwhFan;
+
+            // Light calculation
+            const lightPower = parseFloat(document.getElementById('lightPower').value) / 1000;
+            const lightHours = parseFloat(document.getElementById('lightHours').value);
+            const costPerKwhLight = parseFloat(document.getElementById('costPerKwhLight').value);
+            const lightEnergy = lightPower * lightHours;
+            const lightCost = lightEnergy * costPerKwhLight;
+
+            // TV calculation
+            const tvPower = parseFloat(document.getElementById('tvPower').value) / 1000;
+            const tvHours = parseFloat(document.getElementById('tvHours').value);
+            const costPerKwhTv = parseFloat(document.getElementById('costPerKwhTv').value);
+            const tvEnergy = tvPower * tvHours;
+            const tvCost = tvEnergy * costPerKwhTv;
+
+            const totalEnergy = fanEnergy + lightEnergy + tvEnergy;
+            const totalCost = fanCost + lightCost + tvCost;
+
+            document.getElementById('result').innerHTML =
+                `<p>Total Energy Consumed: ${totalEnergy.toFixed(2)} kWh/day</p>` +
+                `<p>Total Cost per Day: ₹${totalCost.toFixed(2)}</p>` +
+                `<p>Total Cost per Month (30 days): ₹${(totalCost * 30).toFixed(2)}</p>`;
+        }
+    </script>
+
+</body>
+
+</html>
