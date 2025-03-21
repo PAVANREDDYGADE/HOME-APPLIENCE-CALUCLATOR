@@ -5,82 +5,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Household Electricity Bill Calculator</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            color: #fff;
         }
 
         header {
-            background-color: #4CAF50;
-            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
             text-align: center;
-            padding: 1em 0;
+            padding: 1.5em 0;
+            font-size: 1.5em;
+            letter-spacing: 1px;
         }
 
         .container,
         .login-container,
         .welcome-container {
-            max-width: 800px;
-            margin: 100px auto;
-            text-align: center;
-            background: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            margin: 80px auto;
             padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+            text-align: center;
+            color: #fff;
         }
 
         h2 {
-            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
         }
 
         input[type="number"],
         input[type="password"] {
             width: 80%;
-            padding: 10px;
+            padding: 12px 15px;
             margin: 10px 0;
+            border: none;
+            border-radius: 25px;
+            outline: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 1em;
+        }
+
+        input::placeholder {
+            color: #ddd;
         }
 
         .btn {
-            background-color: #4CAF50;
+            background: linear-gradient(to right, #43cea2, #185a9d);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
+            margin-top: 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .btn:hover {
-            background-color: #45a049;
+            background: linear-gradient(to right, #185a9d, #43cea2);
+            transform: scale(1.05);
         }
 
         .result {
             font-weight: bold;
-            margin-top: 20px;
+            margin-top: 25px;
+            font-size: 1.1em;
+            color: #ffeaa7;
         }
 
         table {
             width: 100%;
-            margin-bottom: 20px;
+            margin: 20px 0;
             border-collapse: collapse;
         }
 
         th,
         td {
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        input[type="number"] {
+        th {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        td input[type="number"] {
             width: 80px;
-            padding: 5px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            border: none;
         }
 
         .hidden {
             display: none;
+        }
+
+        #loginError {
+            margin-top: 10px;
+            color: #ff7675;
+        }
+
+        /* Neon border effect */
+        .container:hover,
+        .login-container:hover,
+        .welcome-container:hover {
+            box-shadow: 0 0 15px #00ffe7, 0 0 25px #00ffe7, 0 0 50px #00ffe7;
         }
 
     </style>
@@ -98,24 +151,24 @@
         <p>Please enter the passcode to continue:</p>
         <input type="password" id="passcodeInput" placeholder="Enter passcode"><br>
         <button class="btn" onclick="checkPasscode()">Login</button>
-        <p id="loginError" style="color: red;"></p>
+        <p id="loginError"></p>
     </div>
 
     <!-- Welcome Page -->
     <div class="welcome-container hidden" id="welcomePage">
-        <h2>Welcome to the Appliance Electricity Bill Calculator</h2>
-        <p>Click the button below to start calculating your electricity usage!</p>
+        <h2>Welcome!</h2>
+        <p>Ready to calculate your electricity bill?</p>
         <button class="btn" onclick="showCalculator()">Get Started</button>
     </div>
 
     <!-- Calculator Page -->
     <div class="container hidden" id="calculatorPage">
-        <h2>Enter Appliance Details</h2>
+        <h2>Appliance Details</h2>
         <table>
             <tr>
                 <th>Appliance</th>
-                <th>Power (Watts)</th>
-                <th>Hours Used per Day</th>
+                <th>Power (W)</th>
+                <th>Hours/Day</th>
                 <th>Cost per kWh (₹)</th>
             </tr>
             <tr>
@@ -144,10 +197,9 @@
     </div>
 
     <script>
-        // Login function
         function checkPasscode() {
             const passcode = document.getElementById('passcodeInput').value;
-            const correctPasscode = "1234"; // You can change this to any passcode
+            const correctPasscode = "1234";
 
             if (passcode === correctPasscode) {
                 document.getElementById('loginPage').classList.add('hidden');
@@ -157,28 +209,24 @@
             }
         }
 
-        // Show calculator, hide welcome page
         function showCalculator() {
             document.getElementById('welcomePage').classList.add('hidden');
             document.getElementById('calculatorPage').classList.remove('hidden');
         }
 
         function calculateBill() {
-            // Fan calculation
             const fanPower = parseFloat(document.getElementById('fanPower').value) / 1000;
             const fanHours = parseFloat(document.getElementById('fanHours').value);
             const costPerKwhFan = parseFloat(document.getElementById('costPerKwhFan').value);
             const fanEnergy = fanPower * fanHours;
             const fanCost = fanEnergy * costPerKwhFan;
 
-            // Light calculation
             const lightPower = parseFloat(document.getElementById('lightPower').value) / 1000;
             const lightHours = parseFloat(document.getElementById('lightHours').value);
             const costPerKwhLight = parseFloat(document.getElementById('costPerKwhLight').value);
             const lightEnergy = lightPower * lightHours;
             const lightCost = lightEnergy * costPerKwhLight;
 
-            // TV calculation
             const tvPower = parseFloat(document.getElementById('tvPower').value) / 1000;
             const tvHours = parseFloat(document.getElementById('tvHours').value);
             const costPerKwhTv = parseFloat(document.getElementById('costPerKwhTv').value);
@@ -188,7 +236,6 @@
             const totalEnergy = fanEnergy + lightEnergy + tvEnergy;
             const totalCost = fanCost + lightCost + tvCost;
 
-            // Find which appliance costs the most
             let maxCost = Math.max(fanCost, lightCost, tvCost);
             let expensiveAppliance = '';
 
@@ -205,7 +252,7 @@
                 `<p>Total Cost per Day: ₹${totalCost.toFixed(2)}</p>` +
                 `<p>Total Cost per Week (7 days): ₹${(totalCost * 7).toFixed(2)}</p>` +
                 `<p>Total Cost per Month (30 days): ₹${(totalCost * 30).toFixed(2)}</p>` +
-                `<p><strong>${expensiveAppliance}</strong> consumes the most energy costing ₹${maxCost.toFixed(2)} per day.</p>`;
+                `<p><strong>${expensiveAppliance}</strong> consumes the most energy, costing ₹${maxCost.toFixed(2)} per day.</p>`;
         }
     </script>
 
